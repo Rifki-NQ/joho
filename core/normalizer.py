@@ -13,7 +13,7 @@ class ResponseNormalizer:
             raise InvalidDataSource(f"Invalid data source provided ({source}), expected ({VALID_DATA_SOURCES})")
     
     def _get_anilist_data(self, anime_title: str):
-        data = self.anilist_fetcher.fetch_data(anime_title)["data"]["Media"]
+        data = self.anilist_fetcher.fetch_data_by_title(anime_title)["data"]["Media"]
         return AnimeDataModel(
             source="anilist", id=data["id"],
             english_title=data["title"]["english"], romaji_title=data["title"]["romaji"],
