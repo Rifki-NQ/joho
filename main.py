@@ -19,7 +19,7 @@ class Main:
         
         group = fetch_parser.add_mutually_exclusive_group(required=True)
         group.add_argument("--title", type=str)
-        ## group.add_argument("--id", type=int, dest="Search anime by id") -> (WIP)
+        group.add_argument("--id", type=int)
 
         args = parser.parse_args()
 
