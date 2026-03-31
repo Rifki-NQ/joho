@@ -4,7 +4,7 @@ from requests import ConnectionError
 from abc import ABC, abstractmethod
 from typing import Any
 from core.models.anime_model import DATA_SOURCES, VALID_DATA_SOURCES
-from core.exceptions import InvalidDataSource, AppConnectionError
+from core.exceptions import InvalidDataSource, AppConnectionError, AnimeNotFoundError
 
 class FetchData(ABC):
     
@@ -73,8 +73,14 @@ class FetchAnilist(FetchData):
     
     def fetch_data_by_title(self, anime_title: str) -> dict[Any, Any]:
         data = self._request(url=self.BASE_URL, query=self.QUERY_BY_TITLE, variables={"search": anime_title})
-        return data.json()["data"]["Media"]
+        media_data = data.json()["data"]["Media"]
+        if media_data is None:
+            raise AnimeNotFoundError("Error: requested anime not found!")
+        return media_data
     
     def fetch_data_by_id(self, anime_id: int) -> dict[Any, Any]:
         data = self._request(url=self.BASE_URL, query=self.QUERY_BY_ID, variables={"id": anime_id})
-        return data.json()["data"]["Media"]
+        media_data = data.json()["data"]["Media"]
+        if media_data is None:
+            raise AnimeNotFoundError("Error: requested anime not found!")
+        return media_data
