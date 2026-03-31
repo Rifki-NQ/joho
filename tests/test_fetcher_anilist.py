@@ -7,7 +7,7 @@ anime_title = "Attack on Titan"
 
 @pytest.fixture(scope="module")
 def anilist_data() -> dict[str, Any]:
-    data = anilist_fetcher.fetch_data_by_title(anime_title)["data"]["Media"]
+    data = anilist_fetcher.fetch_data_by_title(anime_title)
     return {
         "english_title": data["title"]["english"],
         "romaji_title": data["title"]["romaji"],

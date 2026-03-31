@@ -73,8 +73,8 @@ class FetchAnilist(FetchData):
     
     def fetch_data_by_title(self, anime_title: str) -> dict[Any, Any]:
         data = self._request(url=self.BASE_URL, query=self.QUERY_BY_TITLE, variables={"search": anime_title})
-        return data.json()
+        return data.json()["data"]["Media"]
     
     def fetch_data_by_id(self, anime_id: int) -> dict[Any, Any]:
         data = self._request(url=self.BASE_URL, query=self.QUERY_BY_ID, variables={"id": anime_id})
-        return data.json()
+        return data.json()["data"]["Media"]
