@@ -7,11 +7,12 @@ from core.normalizer import ResponseNormalizer
 class Main:
     def __init__(self) -> None:
         self.anilist_fetcher = FetchData.create_fetcher("anilist")
-        self.response_normalizer = ResponseNormalizer(self.anilist_fetcher)
+        self.jikan_fetcher = FetchData.create_fetcher("jikan")
+        self.response_normalizer = ResponseNormalizer(self.anilist_fetcher, self.jikan_fetcher)
         self.fetch_cli = FetchCLI(self.response_normalizer)
     
     def main_parser(self):
-        parser = argparse.ArgumentParser(prog="anilist")
+        parser = argparse.ArgumentParser(prog="anitrack")
         subparsers = parser.add_subparsers(dest="command")
 
         #subcommand fetch
