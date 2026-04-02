@@ -1,7 +1,7 @@
 import socket
 import requests
 from requests import ConnectionError
-from jikanpy import Jikan
+from jikanpy import Jikan, APIException
 from abc import ABC, abstractmethod
 from typing import Any, Callable, TypeVar, ParamSpec
 from functools import wraps
@@ -103,9 +103,14 @@ class FetchJikan(FetchData):
     
     @check_internet
     def fetch_data_by_id(self, anime_id: int) -> dict[Any, Any]:
-        return self.jikan.anime(anime_id)["data"]
+        try:
+            return self.jikan.anime(anime_id)["data"]
+        except APIException as e:
+            raise AnimeNotFoundError(f"Error: requested anime not found! status code: {e.status_code}")
     
     @check_internet
     def _search_anime(self, anime_title: str) -> dict[str, Any]:
-        data = self.jikan.search(search_type="anime", query=anime_title, page=1)
-        return data["data"][0]
+        data = self.jikan.search(search_type="anime", query=anime_title)["data"]
+        if not data:
+            raise AnimeNotFoundError("Error: requested anime not found!")
+        return data[0] #return the first anime entry that shows up in search
