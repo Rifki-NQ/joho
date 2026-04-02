@@ -3,12 +3,26 @@ import requests
 from requests import ConnectionError
 from jikanpy import Jikan
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, Callable, TypeVar, ParamSpec
+from functools import wraps
 from core.models.anime_model import DATA_SOURCES, VALID_DATA_SOURCES
 from core.exceptions import InvalidDataSource, AppConnectionError, AnimeNotFoundError
 
+P = ParamSpec("P")
+R = TypeVar("R")
+
+def check_internet(func: Callable[P, R]) -> Callable[P, R]:
+    @wraps(func)
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
+        try:
+            with socket.create_connection(("8.8.8.8", 53), timeout=3.0):
+                pass
+        except OSError:
+            raise AppConnectionError(f"Failed to send requests because no internet available")
+        return func(*args, **kwargs)
+    return wrapper
+
 class FetchData(ABC):
-    
     @staticmethod
     def create_fetcher(data_source: DATA_SOURCES) -> FetchData:
         if data_source == "anilist":
@@ -25,13 +39,6 @@ class FetchData(ABC):
     @abstractmethod
     def fetch_data_by_id(self, anime_id: int) -> dict[Any, Any]:
         pass
-    
-    def _has_internet(self) -> bool:
-        try:
-            socket.create_connection(("8.8.8.8", 53), timeout=3.0)
-            return True
-        except OSError:
-            return False
     
 class FetchAnilist(FetchData):
     BASE_URL = "https://graphql.anilist.co"
@@ -78,10 +85,8 @@ class FetchAnilist(FetchData):
             raise AnimeNotFoundError("Error: requested anime not found!")
         return media_data
     
+    @check_internet
     def _request(self, url: str, query: str, variables: dict[str, str | int]) -> requests.Response:
-        if not self._has_internet():
-            raise AppConnectionError(f"Failed to send requests because no internet available")
-        
         try:
             response = requests.post(url, json={"query": query, "variables": variables})
         except ConnectionError as e:
@@ -96,9 +101,11 @@ class FetchJikan(FetchData):
         anime_data = self._search_anime(anime_title)
         return anime_data
     
+    @check_internet
     def fetch_data_by_id(self, anime_id: int) -> dict[Any, Any]:
         return self.jikan.anime(anime_id)["data"]
     
+    @check_internet
     def _search_anime(self, anime_title: str) -> dict[str, Any]:
         data = self.jikan.search(search_type="anime", query=anime_title, page=1)
         return data["data"][0]
