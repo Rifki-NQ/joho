@@ -1,7 +1,6 @@
 import argparse
 from core.cli.fetch_cli import FetchCLI
 from core.cli.export_cli import ExportCLI
-from core.models.anime_model import VALID_DATA_SOURCES
 from core.fetcher import FetchData
 from core.normalizer import ResponseNormalizer
 from core.file_handler import valid_filepath
@@ -24,7 +23,7 @@ class Main:
 
         #subcommand fetch
         fetch_parser = subparsers.add_parser("fetch", description="fetch anime data")
-        fetch_parser.add_argument("--source", choices=VALID_DATA_SOURCES, required=True)
+        fetch_parser.add_argument("--source", choices={"anilist", "jikan", "all"}, required=True)
         
         group = fetch_parser.add_mutually_exclusive_group(required=True)
         group.add_argument("--title", type=str)
@@ -32,7 +31,7 @@ class Main:
         
         #subcommand export
         export_parser =subparsers.add_parser("export", description="fetch then save anime data")
-        export_parser.add_argument("--source", choices=VALID_DATA_SOURCES, required=True)
+        export_parser.add_argument("--source", choices={"anilist", "jikan"}, required=True)
 
         group = export_parser.add_mutually_exclusive_group(required=True)
         group.add_argument("--title", type=str)

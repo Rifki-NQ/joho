@@ -79,7 +79,7 @@ fetch --source <source> (--title <title> | --id <id>)
 
 | Flag | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| `--source` | string | ✅ Yes | Data source to fetch from. Choices: `anilist` and `jikan` |
+| `--source` | string | ✅ Yes | Data source to fetch from. Choices: `anilist`, `jikan`, `all` |
 | `--title` | string | ✅ One of | Search anime by title |
 | `--id` | int | ✅ One of | Fetch anime by ID |
 
@@ -92,7 +92,7 @@ fetch --source <source> (--title <title> | --id <id>)
 python main.py fetch --source anilist --title "Steins;Gate"
 
 # Fetch by ID
-python main.py fetch --source anilist --id 9253
+python main.py fetch --source jikan --id 9253
 
 # Show fetch subcommand help
 python main.py fetch --help
