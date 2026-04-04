@@ -35,14 +35,15 @@ anitrack/
 │   ├── models
 │   │    └── anime_model.py                 # Dataclasses: AnimeDataModel
 │   ├── cli
-│   │    └── fetch_cli.py                   # Query handler for fetch subcommands
+│   │    ├── fetch_cli.py                   # Query handler for fetch subcommands
+│   │    └── export_cli.py                  # Query handler for export subcommands
 │   ├── exceptions.py                       # Custom exception hierarchy
-│   ├── fetcher.py                          # API fetcher: FetchAnilist
+│   ├── fetcher.py                          # API fetcher: FetchAnilist, FetchJikan
 │   ├── normalizer.py                       # API Data normalizer
 │   └── file_handler.py                     # File handler for DataIO
 ├── storage
 │   └── *.csv                               # Saved data outputs
-└── requirements.txt                        # Dependencies: requests, jikanpy
+└── requirements.txt                        # Dependencies: requests, jikanpy-v4, pandas
 ```
 
 ---
@@ -78,7 +79,7 @@ fetch --source <source> (--title <title> | --id <id>)
 
 | Flag | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| `--source` | string | ✅ Yes | Data source to fetch from. Choices: `anilist` |
+| `--source` | string | ✅ Yes | Data source to fetch from. Choices: `anilist` and `jikan` |
 | `--title` | string | ✅ One of | Search anime by title |
 | `--id` | int | ✅ One of | Fetch anime by ID |
 
@@ -97,13 +98,39 @@ python main.py fetch --source anilist --id 9253
 python main.py fetch --help
 ```
 
----
-
-### General Help
+#### `export` — Fetch and save anime data to a file
 
 ```bash
-python main.py --help
-python main.py fetch --help
+export --source <source> (--title <title> | --id <id>) --path <path> [--overwrite]
+```
+
+**Options:**
+
+| Flag | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `--source` | string | ✅ Yes | Data source to fetch from. Choices: `anilist` and `jikan` |
+| `--title` | string | ✅ One of | Search anime by title |
+| `--id` | int | ✅ One of | Fetch anime by ID |
+| `--path` | string | ✅ Yes | Destination file path to save the exported data |
+| `--overwrite` | flag | ❌ No | Overwrite the data if it's not empty (default: `false`) |
+
+> - `--path` must be inside the `storage/` folder
+> - `--title` and `--id` are mutually exclusive — you must provide exactly one.
+
+**Examples:**
+
+```bash
+# Export by title
+python main.py export --source anilist --title "Steins;Gate" --path storage/data.csv
+
+# Export by ID
+python main.py export --source jikan --id 9253 --path storage/data.csv
+
+# Export and overwrite the data
+python main.py export --source anilist --title "Steins;Gate" --path storage/data.csv --overwrite
+
+# Show export subcommand help
+python main.py export --help
 ```
 
 ---
