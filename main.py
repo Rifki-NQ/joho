@@ -1,15 +1,22 @@
 import argparse
 from core.cli.fetch_cli import FetchCLI
+from core.cli.export_cli import ExportCLI
 from core.models.anime_model import VALID_DATA_SOURCES
 from core.fetcher import FetchData
 from core.normalizer import ResponseNormalizer
+from core.file_handler import valid_filepath
+from core.file_handler import DataIO
 
 class Main:
     def __init__(self) -> None:
         self.anilist_fetcher = FetchData.create_fetcher("anilist")
         self.jikan_fetcher = FetchData.create_fetcher("jikan")
+        
         self.response_normalizer = ResponseNormalizer(self.anilist_fetcher, self.jikan_fetcher)
+        self.file_handler = DataIO()
+        
         self.fetch_cli = FetchCLI(self.response_normalizer)
+        self.export_cli = ExportCLI(self.response_normalizer, self.file_handler)
     
     def main_parser(self):
         parser = argparse.ArgumentParser(prog="anitrack")
@@ -22,11 +29,24 @@ class Main:
         group = fetch_parser.add_mutually_exclusive_group(required=True)
         group.add_argument("--title", type=str)
         group.add_argument("--id", type=int)
+        
+        #subcommand export
+        export_parser =subparsers.add_parser("export", description="fetch then save anime data")
+        export_parser.add_argument("--source", choices=VALID_DATA_SOURCES, required=True)
+
+        group = export_parser.add_mutually_exclusive_group(required=True)
+        group.add_argument("--title", type=str)
+        group.add_argument("--id", type=int)
+
+        export_parser.add_argument("--path", type=valid_filepath, required=True)
+        export_parser.add_argument("--overwrite", action="store_true", default=False)
 
         args = parser.parse_args()
 
         if args.command == "fetch":
             self.fetch_cli.handle_fetch(args)
+        elif args.command == "export":
+            self.export_cli.handle_export(args)
         else:
             parser.print_help()
             

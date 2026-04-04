@@ -1,2 +1,3 @@
 requests
 jikanpy-v4
+pandas
