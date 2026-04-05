@@ -11,7 +11,7 @@ class InvalidDataSource(FetcherError):
     pass
 
 class AppConnectionError(FetcherError):
-    """Raised when there is connection relarted error"""
+    """Raised when there is connection related error"""
     pass
 
 class AnimeNotFoundError(FetcherError):

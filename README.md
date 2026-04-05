@@ -6,7 +6,7 @@ CLI-based tool used for getting anime data from sources like MAL or Anilist
 
 - [Features](#features)
 - [Project Structure](#project-structure)
-- [Intallation](#installation)
+- [Installation](#installation)
 - [Usage](#usage)
 - [Running Tests](#running-tests)
 
@@ -23,6 +23,10 @@ Query anime data from the API using either a title string or a numeric ID. Each 
 - `average_score` — community rating
 - `episodes` — total episode count
 - `genres` — list of genre tags
+
+### Export Anime data
+
+Save fetched anime data to a CSV file.
 
 ---
 
@@ -72,7 +76,7 @@ pip install -r requirements.txt
 #### `fetch` — Fetch anime data
 
 ```bash
-fetch --source <source> (--title <title> | --id <id>)
+fetch --source <source> (--title <title> | --id <id>) [--entry <entry>]
 ```
 
 **Options:**
@@ -82,10 +86,10 @@ fetch --source <source> (--title <title> | --id <id>)
 | `--source` | string | ✅ Yes | Data source to fetch from. Choices: `anilist`, `jikan`, `all` |
 | `--title` | string | ✅ One of | Search anime by title |
 | `--id` | int | ✅ One of | Fetch anime by ID |
-| `--entry` | int | ❌ No | Entry number for search result |
+| `--entry` | int | ❌ No | Entry number for search result (default: `0`) |
 
 > - `--title` and `--id` are mutually exclusive — you must provide exactly one.
-> - `--entry` default value is 0 and only works for fetch by `--title`
+> - `--entry` only works for search by `--title`
 
 **Examples:**
 
@@ -103,7 +107,7 @@ python main.py fetch --help
 #### `export` — Fetch and save anime data to a file
 
 ```bash
-export --source <source> (--title <title> | --id <id>) --path <path> [--overwrite]
+export --source <source> (--title <title> | --id <id>) --path <path> [--entry <entry>] [--overwrite]
 ```
 
 **Options:**
@@ -114,10 +118,12 @@ export --source <source> (--title <title> | --id <id>) --path <path> [--overwrit
 | `--title` | string | ✅ One of | Search anime by title |
 | `--id` | int | ✅ One of | Fetch anime by ID |
 | `--path` | string | ✅ Yes | Destination file path to save the exported data |
+| `--entry` | int | ❌ No | Entry number for search result (default: `0`) |
 | `--overwrite` | flag | ❌ No | Overwrite the data if it's not empty (default: `false`) |
 
 > - `--path` must be inside the `storage/` folder
 > - `--title` and `--id` are mutually exclusive — you must provide exactly one.
+> - `--entry` only works for search by `--title`
 
 **Examples:**
 
