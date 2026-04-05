@@ -12,7 +12,7 @@ class ExportCLI:
     def handle_export(self, args: argparse.Namespace) -> None:
         if args.title: #search by title
             try:
-                data = asdict(self.normalizer.get_anime_data_by_title(source=args.source, anime_title=args.title))
+                data = asdict(self.normalizer.get_anime_data_by_title(source=args.source, anime_title=args.title, entry_number=args.entry))
             except FetcherError as e:
                 print(e)
                 return

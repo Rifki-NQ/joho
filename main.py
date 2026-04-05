@@ -33,6 +33,7 @@ class Main:
         #subcommand export
         export_parser =subparsers.add_parser("export", description="fetch then save anime data")
         export_parser.add_argument("--source", choices={"anilist", "jikan"}, required=True)
+        export_parser.add_argument("--entry", type=int, default=0)
 
         export_group = export_parser.add_mutually_exclusive_group(required=True)
         export_group.add_argument("--title", type=str)
