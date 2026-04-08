@@ -40,12 +40,12 @@ Save fetched anime data to a CSV file.
 anitrack/
 ├── main.py                                 # Entry point; argparser and subcommands
 ├── core/
-│   ├── models
+│   ├── models/
 │   │    └── anime_model.py                 # Dataclasses: AnimeDataModel
-│   ├── cli
+│   ├── cli/
 │   │    ├── fetch_cli.py                   # Query handler for fetch subcommands
 │   │    └── export_cli.py                  # Query handler for export subcommands
-│   ├── fetchers
+│   ├── fetchers/
 │   │    ├── base_fetcher.py                # Abstract base class for fetchers
 │   │    ├── fetcher_factory.py             # Fetchers factory
 │   │    ├── anilist_fetcher.py             # Fetcher for anilist API
@@ -53,7 +53,7 @@ anitrack/
 │   ├── exceptions.py                       # Custom exception hierarchy
 │   ├── normalizer.py                       # API Data normalizer
 │   └── file_handler.py                     # File handler for DataIO
-├── storage
+├── storage/
 │   └── *.csv                               # Saved data outputs
 └── requirements.txt                        # Dependencies: requests, jikanpy-v4, pandas
 ```
