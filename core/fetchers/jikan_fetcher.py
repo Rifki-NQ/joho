@@ -7,9 +7,9 @@ class FetchJikan(FetchData):
     def __init__(self) -> None:
         self.jikan = Jikan()
         
-    def fetch_data_by_title(self, anime_title: str, entry_number: int) -> dict[str, Any]:
+    def fetch_data_by_title(self, anime_title: str) -> list[dict[str, Any]]:
         anime_data = self._search_anime(anime_title)
-        return anime_data[entry_number]
+        return anime_data
     
     @check_internet
     def fetch_data_by_id(self, anime_id: int) -> dict[str, Any]:
