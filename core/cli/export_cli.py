@@ -1,9 +1,8 @@
 from argparse import Namespace
-import asyncio
 from dataclasses import asdict
-from core.cli.fetch_cli import get_all_by_title, get_all_by_id
 from core.normalizer import ResponseNormalizer
 from core.file_handler import DataIO
+from core.utils import get_all_data
 from core.exceptions import FetcherError
 
 class ExportCLI:
@@ -15,7 +14,7 @@ class ExportCLI:
         if args.title: #search by title
             try:
                 if args.source == "all":
-                    data1, data2 = asyncio.run(get_all_by_title(args, self.normalizer))
+                    data1, data2 = get_all_data("title", args, self.normalizer)
                     data_collection = (data1, data2)
                     for data in data_collection:
                         self.file_handler.add_new_data(new_data=data, filepath=args.path, overwrite=args.overwrite)
@@ -29,7 +28,7 @@ class ExportCLI:
         elif args.id: #search by id
             try:
                 if args.source == "all":
-                    data1, data2 = asyncio.run(get_all_by_id(args, self.normalizer))
+                    data1, data2 = get_all_data("id", args, self.normalizer)
                     data_collection = (data1, data2)
                     for data in data_collection:
                         self.file_handler.add_new_data(new_data=data, filepath=args.path, overwrite=args.overwrite)

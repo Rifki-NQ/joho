@@ -53,7 +53,8 @@ anitrack/
 │   │    └── jikan_fetcher.py               # Fetcher for jikan API
 │   ├── exceptions.py                       # Custom exception hierarchy
 │   ├── normalizer.py                       # API Data normalizer
-│   └── file_handler.py                     # File handler for DataIO
+│   ├── file_handler.py                     # File handler for DataIO
+│   └── utils.py                            # Helper functions
 ├── storage/
 │   └── *.csv                               # Saved data outputs
 ├── tests/
