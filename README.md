@@ -44,8 +44,8 @@ anitrack/
 │   │    ├── anime_model.py                 # Dataclasses: AnimeDataModel
 │   │    └── protocols.py                   # Protocols: FetchersProtocol
 │   ├── cli/
-│   │    ├── fetch_cli.py                   # Query handler for fetch subcommands
-│   │    ├── export_cli.py                  # Query handler for export subcommands
+│   │    ├── fetch_cli.py                   # Fetch data then print
+│   │    ├── export_cli.py                  # Fetch data then save
 │   │    └── cli_utils.py                   # CLI Helper functions
 │   ├── fetchers/
 │   │    ├── base_fetcher.py                # Abstract base class for fetchers
@@ -93,7 +93,7 @@ pip install -r requirements.txt
 #### `fetch` — Fetch anime data
 
 ```bash
-fetch --source <source> (--title <title> | --id <id>) [--entry <entry>]
+fetch --source <source> (--title <title> | --id <id>) [--entry <entry>] [--show--titles]
 ```
 
 **Options:**
@@ -104,9 +104,11 @@ fetch --source <source> (--title <title> | --id <id>) [--entry <entry>]
 | `--title` | string | ✅ One of | Search anime by title |
 | `--id` | int | ✅ One of | Fetch anime by ID |
 | `--entry` | int | ❌ No | Entry number for search result (default: `0`) |
+| `--show-title` | flag | ❌ No | display the matched entry's title |
 
 > - `--title` and `--id` are mutually exclusive — you must provide exactly one.
-> - `--entry` only works for search by `--title`
+> - `--entry` and `--show-title` only works for search by `--title`.
+> - `--entry` and `--show-title` are mutually exclusive — you must provide exactly one.
 
 **Examples:**
 
@@ -139,9 +141,9 @@ export --source <source> (--title <title> | --id <id>) --path <path> [--entry <e
 | `--save-all` | flag | ❌ No | Save all entries from search result (default: `false`) |
 | `--overwrite` | flag | ❌ No | Overwrite the data if it's not empty (default: `false`) |
 
-> - `--path` must be inside the `storage/` folder
+> - `--path` must be inside the `storage/` folder.
 > - `--title` and `--id` are mutually exclusive — you must provide exactly one.
-> - `--entry`and `--save-all` only works for search by `--title`
+> - `--entry`and `--save-all` only works for search by `--title`.
 > - `--entry`and `--save-all` are mutually exclusive — you must provide exactly one.
 
 **Examples:**
