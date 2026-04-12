@@ -1,7 +1,7 @@
 from argparse import Namespace
 from core.normalizer import ResponseNormalizer
 from core.file_handler import DataIO
-from core.utils import get_all_data_by_title, get_all_data_by_id
+from core.cli.cli_utils import get_all_data_by_title, get_all_data_by_id
 from core.exceptions import FetcherError
 
 class ExportCLI:
@@ -14,13 +14,13 @@ class ExportCLI:
             self._handle_args_title(args)
                 
         elif args.id: #search by id
-            self._handle_args_title(args)
+            self._handle_args_id(args)
         
     def _handle_args_title(self, args: Namespace) -> None:
         try:
-            if args.source == "all":
+            if args.source == "all": #handle --source all
                 self._handle_source_all_by_title(args)
-            elif args.save_all:
+            elif args.save_all: #handle --save-all flag
                 data_list = self.normalizer.get_all_anime_data_by_title(args.source, args.title)
                 self.file_handler.save_all_data(data_list, args.path, args.overwrite)
             else:
@@ -33,7 +33,7 @@ class ExportCLI:
         
     def _handle_args_id(self, args: Namespace) -> None:
         try:
-            if args.source == "all":
+            if args.source == "all": #handle --source all
                 self._handle_source_all_by_id(args)
             else:
                 data = self.normalizer.get_anime_data_by_id(args.source, args.id)
@@ -45,14 +45,14 @@ class ExportCLI:
     def _handle_source_all_by_title(self, args: Namespace) -> None:
         data_collection = get_all_data_by_title(args, self.normalizer)
         for data_list in data_collection:
+            #handle --save-all flag
+            if args.save_all:
+                self.file_handler.save_all_data(data_list, args.path, args.overwrite)
             #handle --entry
-            if args.entry:
+            else:
                 entry: int = args.entry
                 self.file_handler.save_data(data_list[entry], args.path, args.overwrite)
-            #handle --save-all
-            else:
-                self.file_handler.save_all_data(data_list, args.path, args.overwrite)
-                args.overwrite = False
+            args.overwrite = False
 
     def _handle_source_all_by_id(self, args: Namespace) -> None:
         data_list = get_all_data_by_id(args, self.normalizer)

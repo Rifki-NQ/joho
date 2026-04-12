@@ -2,7 +2,7 @@ from argparse import Namespace
 from dataclasses import asdict, fields
 from core.normalizer import ResponseNormalizer
 from core.exceptions import FetcherError
-from core.utils import get_all_data_by_title, get_all_data_by_id
+from core.cli.cli_utils import get_all_data_by_title, get_all_data_by_id
 from core.models.anime_model import AnimeDataModel
 
 class FetchCLI:
@@ -12,7 +12,7 @@ class FetchCLI:
     def handle_fetch(self, args: Namespace) -> None:
         if args.title: #search by title
             try:
-                if args.source == "all":
+                if args.source == "all": #handle --source all
                     data1, data2 = get_all_data_by_title(args, self.normalizer)
                     entry_num: int = args.entry
                     for f in fields(AnimeDataModel):
@@ -28,7 +28,7 @@ class FetchCLI:
                 
         elif args.id: #search by id
             try:
-                if args.source == "all":
+                if args.source == "all": #handle --source all
                     data1, data2 = get_all_data_by_id(args, self.normalizer)
                     for f in fields(AnimeDataModel):
                         print(f"{f.name}: {asdict(data1)[f.name]} | {asdict(data2)[f.name]}")
