@@ -10,10 +10,19 @@ class ResponseNormalizer:
         
     def get_anime_data_by_title(self, source: DATA_SOURCES, anime_title: str, entry_number: int) -> AnimeDataModel:
         self._validate_data_source(source)
-        if source == "anilist":
-            return self._get_anilist_data_by_title(anime_title, entry_number)
-        elif source == "jikan":
-            return self._get_jikan_data_by_title(anime_title, entry_number)
+        get_by_title_map = {
+            "anilist": self._get_anilist_data_by_title,
+            "jikan": self._get_jikan_data_by_title
+        }
+        return get_by_title_map[source](anime_title, entry_number)
+    
+    def get_anime_data_by_id(self, source: DATA_SOURCES, anime_id: int) -> AnimeDataModel:
+        self._validate_data_source(source)
+        get_by_id_map = {
+            "anilist": self._get_anilist_data_by_id,
+            "jikan": self._get_jikan_data_by_id
+        }
+        return get_by_id_map[source](anime_id)
     
     def get_all_anime_data_by_title(self, source: DATA_SOURCES, anime_title: str, max_entry: int | None = None) -> list[AnimeDataModel]:
         self._validate_data_source(source)
@@ -33,13 +42,6 @@ class ResponseNormalizer:
                 break
             data_model_list.append(data_converter[source](data))
         return data_model_list
-    
-    def get_anime_data_by_id(self, source: DATA_SOURCES, anime_id: int) -> AnimeDataModel:
-        self._validate_data_source(source)
-        if source == "anilist":
-            return self._get_anilist_data_by_id(anime_id)
-        elif source == "jikan":
-            return self._get_jikan_data_by_id(anime_id)
     
     def _get_anilist_data_by_title(self, anime_title: str, entry_number: int) -> AnimeDataModel:
         data = self.anilist_fetcher.fetch_data_by_title(anime_title)[entry_number]
