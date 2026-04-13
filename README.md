@@ -93,7 +93,7 @@ pip install -r requirements.txt
 #### `fetch` — Fetch anime data
 
 ```bash
-fetch --source <source> (--title <title> | --id <id>) [--entry <entry>] [--show--titles]
+fetch --source <source> (--title <title> | --id <id>) [--entry <entry> | --show-title [--max-entry <max-entry>]]
 ```
 
 **Options:**
@@ -103,12 +103,14 @@ fetch --source <source> (--title <title> | --id <id>) [--entry <entry>] [--show-
 | `--source` | string | ✅ Yes | Data source to fetch from. Choices: `anilist`, `jikan`, `all` |
 | `--title` | string | ✅ One of | Search anime by title |
 | `--id` | int | ✅ One of | Fetch anime by ID |
-| `--entry` | int | ❌ No | Entry number for search result (default: `0`) |
-| `--show-title` | flag | ❌ No | display the matched entry's title |
+| `--entry` | int | ❌ No | Entry number for search result (default: `none`) |
+| `--show-title` | flag | ❌ No | display the matched entry's title (default: `false`) |
+| `--max-entry` | int | ❌ No | Max anime titles to display (default: `none`) |
 
 > - `--title` and `--id` are mutually exclusive — you must provide exactly one.
-> - `--entry` and `--show-title` only works for search by `--title`.
-> - `--entry` and `--show-title` are mutually exclusive — you must provide exactly one.
+> - `--entry` and `--show-title` are only valid when `--title` is used.
+> - `--entry` and `--show-title` are mutually exclusive — provide at most one.
+> - `--max-entry` only works with `--show-title`.
 
 **Examples:**
 
@@ -126,7 +128,7 @@ python main.py fetch --help
 #### `export` — Fetch and save anime data to a file
 
 ```bash
-export --source <source> (--title <title> | --id <id>) --path <path> [--entry <entry>] [--overwrite]
+export --source <source> (--title <title> | --id <id>) --path <path> [--entry <entry> | --save-all [--max-entry <max-entry>]] [--overwrite]
 ```
 
 **Options:**
@@ -146,7 +148,7 @@ export --source <source> (--title <title> | --id <id>) --path <path> [--entry <e
 > - `--title` and `--id` are mutually exclusive — you must provide exactly one.
 > - `--entry`and `--save-all` are only valid when `--title` is used.
 > - `--entry`and `--save-all` are mutually exclusive — provide at most one.
-> - `--max-entry` only works with `--save-all`
+> - `--max-entry` only works with `--save-all`.
 
 **Examples:**
 
