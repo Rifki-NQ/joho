@@ -47,6 +47,7 @@ class Main:
 
         export_parser.add_argument("--path", type=valid_filepath, required=True)
         export_parser.add_argument("--overwrite", action="store_true", default=False)
+        export_parser.add_argument("--max-entry", type=int, default=None)
 
         args = parser.parse_args()
         
@@ -57,6 +58,8 @@ class Main:
         elif args.command == "export":
             if args.title is None and (args.entry != 0 or args.save_all):
                 export_parser.error("--entry and --save-all can only be used with --title")
+            elif args.max_entry is not None and not args.save_all:
+                export_parser.error("--max-entry can only be used with --save-all")
             self.export_cli.handle_export(args)
         else:
             parser.print_help()

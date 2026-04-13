@@ -11,9 +11,9 @@ def get_all_data_by_id(args: Namespace, normalizer: ResponseNormalizer) -> tuple
 
 async def _get_all_by_title(args: Namespace, normalizer: ResponseNormalizer) -> tuple[list[AnimeDataModel], list[AnimeDataModel]]:
         anilist_data, jikan_data = await asyncio.gather(asyncio.to_thread(lambda: normalizer.get_all_anime_data_by_title(
-                                                                          source="anilist", anime_title=args.title)),
+                                                                          source="anilist", anime_title=args.title, max_entry=args.max_entry)),
                                                         asyncio.to_thread(lambda: normalizer.get_all_anime_data_by_title(
-                                                                          source="jikan", anime_title=args.title)))
+                                                                          source="jikan", anime_title=args.title, max_entry=args.max_entry)))
         return anilist_data, jikan_data
     
 async def _get_all_by_id(args: Namespace, normalizer: ResponseNormalizer) -> tuple[AnimeDataModel, AnimeDataModel]:

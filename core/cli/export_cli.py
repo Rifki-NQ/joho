@@ -21,7 +21,7 @@ class ExportCLI:
             if args.source == "all": #handle --source all
                 self._handle_source_all_by_title(args)
             elif args.save_all: #handle --save-all flag
-                data_list = self.normalizer.get_all_anime_data_by_title(args.source, args.title)
+                data_list = self.normalizer.get_all_anime_data_by_title(args.source, args.title, args.max_entry)
                 self.file_handler.save_all_data(data_list, args.path, args.overwrite)
             else:
                 data = self.normalizer.get_anime_data_by_title(args.source, args.title, args.entry)
