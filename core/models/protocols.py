@@ -10,12 +10,15 @@ class FetchersProtocol(Protocol):
         
 
 class NormalizerProtocol(Protocol):
-    def get_anime_by_title(self, anime_title: str, entry_number: int  = 0) -> AnimeDataModel:
+    def get_anime_by_title(self,
+                           anime_title: str,
+                           entry_index: int | None = None) -> AnimeDataModel:
         ...
     
-    def get_anime_by_id(self, anime_id: int, ) -> AnimeDataModel:
+    def get_anime_by_id(self, anime_id: int) -> AnimeDataModel:
         ...
     
-    def get_all_anime_by_title(self, anime_title: str,
+    def get_all_anime_by_title(self,
+                               anime_title: str,
                                max_entry: int | None = None) -> list[AnimeDataModel]:
         ...

@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
 from core.models.anime_model import AnimeDataModel
 
+DEFAULT_ENTRY_INDEX = 0
+
 class BaseNormalizer(ABC):
     @abstractmethod
-    def get_anime_by_title(self, anime_title: str, entry_number: int  = 0) -> AnimeDataModel:
+    def get_anime_by_title(self, anime_title: str, entry_index: int | None = None) -> AnimeDataModel:
         pass
     
     @abstractmethod
