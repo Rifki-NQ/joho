@@ -141,6 +141,9 @@ python main.py fetch --source anilist --title "Steins;Gate"
 # Fetch by ID
 python main.py fetch --source jikan --id 9253
 
+# Fetch anime titles
+python main.py fetch --source all --title "mushoku tensei" --show-title
+
 # Show fetch subcommand help
 python main.py fetch --help
 ```
@@ -182,6 +185,9 @@ python main.py export --source jikan --id 9253 --path storage/data.csv
 # Export and overwrite the data
 python main.py export --source all --title "Steins;Gate" --path storage/data.csv --overwrite
 
+# Export all entries
+python main.py export --source anilist --title "mushoku tensei" --path storage/data.csv --save-all
+
 # Show export subcommand help
 python main.py export --help
 ```
@@ -219,13 +225,21 @@ python main.py fetch --source all --title "mushoku tensei"
 **Result:**
 
 ```bash
-source: anilist | jikan
-id: 108465 | 39535
-english_title: Mushoku Tensei: Jobless Reincarnation | Mushoku Tensei: Jobless Reincarnation
-romaji_title: Mushoku Tensei: Isekai Ittara Honki Dasu | Mushoku Tensei: Isekai Ittara Honki Dasu
-average_score: 82 | 8.33
-episodes: 11 | 11
-genres: ['Adventure', 'Drama', 'Ecchi', 'Fantasy'] | ['Adventure', 'Drama', 'Fantasy', 'Ecchi']
+source: anilist
+id: 108465
+english_title: Mushoku Tensei: Jobless Reincarnation
+romaji_title: Mushoku Tensei: Isekai Ittara Honki Dasu
+average_score: 82
+episodes: 11
+genres: ['Adventure', 'Drama', 'Ecchi', 'Fantasy']
+
+source: jikan
+id: 39535
+english_title: Mushoku Tensei: Jobless Reincarnation
+romaji_title: Mushoku Tensei: Isekai Ittara Honki Dasu
+average_score: 8.33
+episodes: 11
+genres: ['Adventure', 'Drama', 'Fantasy', 'Ecchi']
 ```
 
 ---
@@ -233,7 +247,32 @@ genres: ['Adventure', 'Drama', 'Ecchi', 'Fantasy'] | ['Adventure', 'Drama', 'Fan
 **Command:**
 
 ```bash
-python main.py export --source anilist --title "steins gate" --path storage/data.csv --overwrite
+python main.py fetch --source jikan --title "mushoku tensei" --show-title --max-entry 10
+```
+
+**Result:**
+
+```bash
+Source: jikan
+Romaji title | English title
+0. Mushoku Tensei: Isekai Ittara Honki Dasu | Mushoku Tensei: Jobless Reincarnation
+1. Mushoku Tensei II: Isekai Ittara Honki Dasu | Mushoku Tensei: Jobless Reincarnation Season 2
+2. Mushoku Tensei II: Isekai Ittara Honki Dasu Part 2 | Mushoku Tensei: Jobless Reincarnation Season 2 Part 2
+3. Mushoku Tensei II: Isekai Ittara Honki Dasu - Shugo Jutsushi Fitz | Mushoku Tensei: Jobless Reincarnation Season 2 - Episode 0 "Guardian Fitz"
+4. Mushoku Tensei: Isekai Ittara Honki Dasu - Eris no Goblin Toubatsu | Mushoku Tensei: Jobless Reincarnation - Eris the Goblin Slayer
+5. Mushoku Tensei: Isekai Ittara Honki Dasu Part 2 | Mushoku Tensei: Jobless Reincarnation Part 2
+6. Mushoku Tensei III: Isekai Ittara Honki Dasu | Mushoku Tensei: Jobless Reincarnation Season 3
+7. Google Play de Chou Musou!? Tensei shitara Android User Datta. Special | None
+8. Google Play de Chou Musou!? Tensei shitara Android User Datta. | None
+9. Rakudai Kenja no Gakuin Musou: Nidome no Tensei, S-Rank Cheat Majutsushi Boukenroku | The Failed Sage's Academy Domination
+```
+
+---
+
+**Command:**
+
+```bash
+python main.py export --source anilist --title "steins gate" --path storage/data.csv
 ```
 
 **Result:**
@@ -257,12 +296,40 @@ python main.py export --source anilist --title "steins gate" --path storage/data
 
 ```bash
 source,id,english_title,romaji_title,average_score,episodes,genres
-anilist,9253,Steins;Gate,Steins;Gate,89,24,"['Drama', 'Psychological', 'Sci-Fi', 'Thriller']"
-anilist,21127,Steins;Gate 0,Steins;Gate 0,84,23,"['Drama', 'Psychological', 'Sci-Fi', 'Thriller']"
+anilist,9253,Steins;Gate,Steins;Gate,89,24,"['Drama', 'Psychological', 'Sci-Fi', 'Thriller']" # <- previous data
+anilist,21127,Steins;Gate 0,Steins;Gate 0,84,23,"['Drama', 'Psychological', 'Sci-Fi', 'Thriller']" # <- appends new data
 ```
 
 > - The exported data is saved to `storage/data.csv`.
-> - If the `--overwrite` flag is not provided, new data will be appended to the       existing file instead of overwriting it.
+> - If the `--overwrite` flag is not provided, new data will be appended to the existing file instead of overwriting it.
+
+---
+
+**Command:**
+
+```bash
+python main.py export --source all --title "mushoku tensei" --path storage/data.csv --save-all --max-entry 5 --overwrite
+```
+
+**Result:**
+
+```bash
+source,id,english_title,romaji_title,average_score,episodes,genres
+anilist,108465,Mushoku Tensei: Jobless Reincarnation,Mushoku Tensei: Isekai Ittara Honki Dasu,82.0,11.0,"['Adventure', 'Drama', 'Ecchi', 'Fantasy']"
+anilist,146065,Mushoku Tensei: Jobless Reincarnation Season 2,Mushoku Tensei II: Isekai Ittara Honki Dasu,81.0,13.0,"['Adventure', 'Drama', 'Ecchi', 'Fantasy']"
+anilist,178789,Mushoku Tensei: Jobless Reincarnation Season 3,Mushoku Tensei III: Isekai Ittara Honki Dasu,,,"['Adventure', 'Drama', 'Ecchi', 'Fantasy']"
+anilist,166873,Mushoku Tensei: Jobless Reincarnation Season 2 Part 2,Mushoku Tensei II: Isekai Ittara Honki Dasu Part 2,83.0,12.0,"['Adventure', 'Drama', 'Ecchi', 'Fantasy']"
+anilist,127720,Mushoku Tensei: Jobless Reincarnation Cour 2,Mushoku Tensei: Isekai Ittara Honki Dasu Part 2,85.0,12.0,"['Adventure', 'Drama', 'Ecchi', 'Fantasy']"
+jikan,39535,Mushoku Tensei: Jobless Reincarnation,Mushoku Tensei: Isekai Ittara Honki Dasu,8.33,11.0,"['Adventure', 'Drama', 'Fantasy', 'Ecchi']"
+jikan,51179,Mushoku Tensei: Jobless Reincarnation Season 2,Mushoku Tensei II: Isekai Ittara Honki Dasu,8.2,12.0,"['Adventure', 'Drama', 'Fantasy', 'Ecchi']"
+jikan,55888,Mushoku Tensei: Jobless Reincarnation Season 2 Part 2,Mushoku Tensei II: Isekai Ittara Honki Dasu Part 2,8.39,12.0,"['Adventure', 'Drama', 'Fantasy', 'Ecchi']"
+jikan,55818,"Mushoku Tensei: Jobless Reincarnation Season 2 - Episode 0 ""Guardian Fitz""",Mushoku Tensei II: Isekai Ittara Honki Dasu - Shugo Jutsushi Fitz,7.54,1.0,"['Adventure', 'Drama', 'Fantasy', 'Ecchi']"
+jikan,50360,Mushoku Tensei: Jobless Reincarnation - Eris the Goblin Slayer,Mushoku Tensei: Isekai Ittara Honki Dasu - Eris no Goblin Toubatsu,7.79,1.0,"['Adventure', 'Drama', 'Fantasy']"
+```
+
+> - The exported data is saved to `storage/data.csv`.
+> - `--max-entry` limits the number of entries saved per source to the specified value.
+> - With the `--overwrite` flag, all previous data gets overwritten with the new data.
 
 ---
 
