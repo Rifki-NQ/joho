@@ -1,8 +1,5 @@
 from dataclasses import dataclass
-from typing import Literal, get_args
-
-DATA_SOURCES = Literal["anilist", "jikan"]
-VALID_DATA_SOURCES = get_args(DATA_SOURCES)
+from core.constants import DATA_SOURCES
 
 @dataclass
 class AnimeDataModel:

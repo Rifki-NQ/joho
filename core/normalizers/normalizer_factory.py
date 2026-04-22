@@ -1,8 +1,8 @@
-from core.models.anime_model import DATA_SOURCES, VALID_DATA_SOURCES
 from core.normalizers.base_normalizer import BaseNormalizer
 from core.normalizers.anilist_normalizer import AnilistNormalizer
 from core.normalizers.jikan_normalizer import JikanNormalizer
 from core.models.protocols import FetchersProtocol
+from core.constants import DATA_SOURCES, VALID_DATA_SOURCES
 from core.exceptions import InvalidDataSource
 
 def create_normalizer(source: DATA_SOURCES, fetcher: FetchersProtocol) -> BaseNormalizer:

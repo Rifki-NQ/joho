@@ -4,9 +4,8 @@ from typing import Iterable, Sequence
 from core.cli.cli_utils import get_all_data_by_title, get_all_data_by_id
 from core.models.anime_model import AnimeDataModel
 from core.models.protocols import NormalizerProtocol
+from core.constants import DEFAULT_ENTRY_INDEX
 from core.exceptions import FetcherError
-
-DEFAULT_ENTRY_INDEX = 0
 
 class FetchCLI:
     def handle_fetch_cli(

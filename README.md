@@ -57,6 +57,7 @@ anitrack/
 │   │    ├── normalizer_factory.py          # Normalizers factory
 │   │    ├── anilist_normalizer.py          # Normalizer for Anilist API data
 │   │    └── jikan_normalizer.py            # Normalizer for Jikan API data
+│   ├── constants.py                        # Shared constants
 │   ├── exceptions.py                       # Custom exception hierarchy
 │   └── file_handler.py                     # File handler for DataIO
 ├── storage/

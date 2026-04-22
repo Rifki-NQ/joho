@@ -1,7 +1,8 @@
 from typing import Any
 from core.models.anime_model import AnimeDataModel
-from core.normalizers.base_normalizer import BaseNormalizer, DEFAULT_ENTRY_INDEX
+from core.normalizers.base_normalizer import BaseNormalizer
 from core.models.protocols import FetchersProtocol
+from core.constants import DEFAULT_ENTRY_INDEX
 
 class JikanNormalizer(BaseNormalizer):
     def __init__(self, jikan_fetcher: FetchersProtocol) -> None:
