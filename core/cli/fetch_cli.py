@@ -5,7 +5,7 @@ from core.cli.cli_utils import get_all_data_by_title, get_all_data_by_id
 from core.models.anime_model import AnimeDataModel
 from core.models.protocols import NormalizerProtocol
 from core.constants import DEFAULT_ENTRY_INDEX
-from core.exceptions import FetcherError
+from core.exceptions import FetcherError, EntryIndexError
 
 class FetchCLI:
     def handle_fetch_cli(
@@ -21,6 +21,8 @@ class FetchCLI:
             self._handle_fetch_multiple(args, normalizers)
         except FetcherError as e:
             print(e)
+        except EntryIndexError:
+            print(f"Error: out of bound entry index: {args.entry}, for title: {args.title}")
 
     def _handle_fetch_single(
         self,
@@ -50,7 +52,10 @@ class FetchCLI:
                     self._show_title(all_data)
                 return
             for all_data in data_collection:
-                self._show_entry(all_data[DEFAULT_ENTRY_INDEX if args.entry is None else args.entry])
+                try:
+                    self._show_entry(all_data[DEFAULT_ENTRY_INDEX if args.entry is None else args.entry])
+                except IndexError as e:
+                    raise EntryIndexError from e
         elif args.id:
             all_data = get_all_data_by_id(args, *normalizers)
             for data in all_data:

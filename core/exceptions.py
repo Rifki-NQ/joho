@@ -21,3 +21,7 @@ class AnilistError(FetcherError):
 class JikanError(FetcherError):
     """Raised when Jikan error occured"""
     pass
+
+class EntryIndexError(AppError):
+    """Raised when the entry index is out of bound"""
+    pass

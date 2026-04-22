@@ -3,6 +3,7 @@ from core.models.anime_model import AnimeDataModel
 from core.normalizers.base_normalizer import BaseNormalizer
 from core.models.protocols import FetchersProtocol
 from core.constants import DEFAULT_ENTRY_INDEX
+from core.exceptions import EntryIndexError
 
 class JikanNormalizer(BaseNormalizer):
     def __init__(self, jikan_fetcher: FetchersProtocol) -> None:
@@ -12,7 +13,10 @@ class JikanNormalizer(BaseNormalizer):
         if entry_index is None:
             entry_index = DEFAULT_ENTRY_INDEX
         raw_data_list = self.jikan_fetcher.fetch_data_by_title(anime_title)
-        return self._jikan_to_anime_model(raw_data_list[entry_index])
+        try:
+            return self._jikan_to_anime_model(raw_data_list[entry_index])
+        except IndexError as e:
+            raise EntryIndexError from e
     
     def get_anime_by_id(self, anime_id: int) -> AnimeDataModel:
         raw_data = self.jikan_fetcher.fetch_data_by_id(anime_id)
