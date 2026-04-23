@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Literal
 from core.models.anime_model import AnimeDataModel
 from core.normalizers.base_normalizer import BaseNormalizer
 from core.models.protocols import FetchersProtocol
@@ -34,11 +34,48 @@ class AnilistNormalizer(BaseNormalizer):
     
     def _anilist_to_anime_model(self, data: dict[str, Any]) -> AnimeDataModel:
         return AnimeDataModel(
-            source="anilist",
+            data_source="anilist",
             id=data["id"],
-            english_title=data["title"]["english"],
             romaji_title=data["title"]["romaji"],
-            average_score=data["averageScore"],
+            english_title=data["title"]["english"],
+            format=data["format"],
             episodes=data["episodes"],
-            genres=data["genres"]
+            status=data["status"],
+            average_score=data["averageScore"],
+            duration=data["duration"],
+            start_date=self._get_date(data["startDate"]),
+            end_date=self._get_date(data["endDate"]),
+            studio=self._get_animation_studio(data["studios"]["nodes"]),
+            source=data["source"],
+            genres=data["genres"],
+            all_time_rank=self._get_ranking("RATED", data["rankings"]),
+            all_time_popularity=self._get_ranking("POPULAR", data["rankings"])
         )
+        
+    def _get_animation_studio(
+        self,
+        studio_nodes: list[dict[str, bool | str]]
+        ) -> str | None:
+        for node in studio_nodes:
+            if node["isAnimationStudio"]:
+                return str(node["name"])
+        return None
+    
+    def _get_date(self, dates: dict[str, int]) -> str | None:
+        try:
+            return f"{dates['year']}-{dates['month']:02d}-{dates['day']:02d}"
+        except KeyError:
+            return None
+        except TypeError:
+            return None
+        
+        
+    def _get_ranking(
+        self,
+        rank_type: Literal["RATED", "POPULAR"],
+        rankings: list[dict[str, bool | str]]
+        ) -> int | None:
+        for rank in rankings:
+            if rank["type"] == rank_type and rank["allTime"]:
+                return int(rank["rank"])
+        return None
