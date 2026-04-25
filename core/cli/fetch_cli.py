@@ -68,7 +68,7 @@ class FetchCLI:
         print("")
 
     def _show_title(self, all_data: list[AnimeDataModel]) -> None:
-        print(f"Source: {all_data[0].source}")
+        print(f"Source: {all_data[0].data_source}")
         print("Romaji title | English title")
         for i, entry_data in enumerate(all_data):
             print(f"{i}. {entry_data.romaji_title} | {entry_data.english_title}")
