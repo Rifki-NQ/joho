@@ -36,39 +36,43 @@ Save fetched anime data to a CSV file.
 
 ## Project Structure
 
-```bash
+``` bash
 joho/
-├── main.py                                 # Entry point; argparser and subcommands
-├── core/
-│   ├── models/
-│   │    ├── anime_model.py                 # Dataclasses: AnimeDataModel
-│   │    └── protocols.py                   # Protocols: FetchersProtocol, NormalizerProtocol
-│   ├── cli/
-│   │    ├── fetch_cli.py                   # Fetch data then print
-│   │    ├── export_cli.py                  # Fetch data then save
-│   │    └── cli_utils.py                   # CLI Helper functions
-│   ├── fetchers/
-│   │    ├── base_fetcher.py                # Abstract base class for fetchers
-│   │    ├── fetcher_factory.py             # Fetchers factory
-│   │    ├── anilist_fetcher.py             # Fetcher for anilist API
-│   │    └── jikan_fetcher.py               # Fetcher for jikan API
-│   ├── normalizers/
-│   │    ├── base_normalizer.py             # Abstract base class for normalizers
-│   │    ├── normalizer_factory.py          # Normalizers factory
-│   │    ├── anilist_normalizer.py          # Normalizer for Anilist API data
-│   │    └── jikan_normalizer.py            # Normalizer for Jikan API data
-│   ├── constants.py                        # Shared constants
-│   ├── exceptions.py                       # Custom exception hierarchy
-│   └── file_handler.py                     # File handler for DataIO
-├── storage/
-│   └── *.csv                               # Saved data outputs
+├── joho/
+│   ├── __init__.py
+│   ├── main.py                            # Entry point; argparser and subcommands
+│   └── core/
+│       ├── __init__.py
+│       ├── constants.py                   # Shared constants
+│       ├── exceptions.py                  # Custom exception hierarchy
+│       ├── file_handler.py                # File handler for DataIO
+│       ├── models/
+│       │   ├── anime_model.py             # Dataclasses: AnimeDataModel
+│       │   └── protocols.py               # Protocols: FetchersProtocol, NormalizerProtocol
+│       ├── cli/
+│       │   ├── fetch_cli.py               # Fetch data then print
+│       │   ├── export_cli.py              # Fetch data then save
+│       │   └── cli_utils.py               # CLI Helper functions
+│       ├── fetchers/
+│       │   ├── base_fetcher.py            # Abstract base class for fetchers
+│       │   ├── fetcher_factory.py         # Fetchers factory
+│       │   ├── anilist_fetcher.py         # Fetcher for AniList API
+│       │   └── jikan_fetcher.py           # Fetcher for Jikan API
+│       └── normalizers/
+│           ├── base_normalizer.py         # Abstract base class for normalizers
+│           ├── normalizer_factory.py      # Normalizers factory
+│           ├── anilist_normalizer.py      # Normalizer for AniList API data
+│           └── jikan_normalizer.py        # Normalizer for Jikan API data
 ├── tests/
-│   ├── fetchers_mock_data.py               # Fetcher mock classes: MockAnilistFetcher, MockJikanFetcher
+│   ├── fetchers_mock_data.py              # Mock classes: MockAnilistFetcher, MockJikanFetcher
 │   ├── test_fetcher_anilist.py
 │   ├── test_fetcher_jikan.py
 │   └── test_normalizer.py
-├── requirements.txt                        # Dependencies: requests, jikanpy-v4, pandas
-└── requirements-dev.txt                    # Optional dependencies: pytest, mypy, pandas-stubs, types-requests
+├── storage/
+│   └── *.csv                              # Saved data outputs
+├── pyproject.toml                         # Project metadata and dependencies
+├── README.md
+└── .gitignore
 ```
 
 ---
@@ -99,10 +103,10 @@ source .venv/bin/activate
 .venv\Scripts\activate
 
 # 5. Install dependencies
-pip install -r requirements.txt
+pip install -e .
 
 # (Optional) Install dev dependencies
-pip install -r requirements-dev.txt
+pip install -e ".[dev]"
 ```
 
 ---
