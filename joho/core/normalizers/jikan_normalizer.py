@@ -58,13 +58,11 @@ class JikanNormalizer(BaseNormalizer):
         )
 
     def _get_date(
-        self, type: Literal["start", "end"], airing_date: dict[str, str | None]
+        self, date_type: Literal["start", "end"], airing_date: dict[str, str | None]
     ) -> str | None:
-        if airing_date["from"] is None or airing_date["to"] is None:
-            return None
-        elif type == "start":
+        if date_type == "start" and airing_date["from"] is not None:
             return airing_date["from"][:10]
-        elif type == "end":
+        elif date_type == "end" and airing_date["to"] is not None:
             return airing_date["to"][:10]
         return None
 
