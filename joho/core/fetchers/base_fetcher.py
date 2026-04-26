@@ -16,7 +16,7 @@ def check_internet(func: Callable[P, R]) -> Callable[P, R]:
                 pass
         except OSError:
             raise AppConnectionError(
-                f"Failed to send requests because no internet available"
+                "Failed to send requests because no internet available"
             )
         return func(*args, **kwargs)
 
