@@ -1,6 +1,5 @@
 import pandas as pd
 from pathlib import Path
-from typing import Iterable
 from dataclasses import fields, asdict
 from argparse import ArgumentTypeError
 from joho.core.models.anime_model import AnimeDataModel
@@ -32,16 +31,6 @@ class DataIO:
         df_previous_data = self._read_file(filepath)
         df_merged_data = pd.concat([df_previous_data, df_new_data], ignore_index=True)
         df_merged_data.to_csv(filepath, index=False)
-
-    def save_all_data(
-        self,
-        new_data_list: Iterable[AnimeDataModel],
-        filepath: Path,
-        overwrite: bool = False,
-    ) -> None:
-        for data in new_data_list:
-            self.save_data(data, filepath, overwrite)
-            overwrite = False
 
     def _read_file(self, filepath: Path) -> pd.DataFrame:
         try:

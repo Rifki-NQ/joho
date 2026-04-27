@@ -25,7 +25,9 @@ def anime_data_model_jikan(jikan_normalizer: NormalizerProtocol) -> AnimeDataMod
     return jikan_normalizer.get_anime_by_title("Attack on titan")
 
 
-def test_response_normalizer_anilist_value(anime_data_model_anilist: AnimeDataModel) -> None:
+def test_response_normalizer_anilist_value(
+    anime_data_model_anilist: AnimeDataModel,
+) -> None:
     assert anime_data_model_anilist.data_source == "anilist"
     assert anime_data_model_anilist.id == 16498
     assert anime_data_model_anilist.romaji_title == "Shingeki no Kyojin"
@@ -44,7 +46,9 @@ def test_response_normalizer_anilist_value(anime_data_model_anilist: AnimeDataMo
     assert anime_data_model_anilist.all_time_popularity == 1
 
 
-def test_response_normalizer_jikan_value(anime_data_model_jikan: AnimeDataModel) -> None:
+def test_response_normalizer_jikan_value(
+    anime_data_model_jikan: AnimeDataModel,
+) -> None:
     assert anime_data_model_jikan.data_source == "jikan"
     assert anime_data_model_jikan.id == 16498
     assert anime_data_model_jikan.romaji_title == "Shingeki no Kyojin"

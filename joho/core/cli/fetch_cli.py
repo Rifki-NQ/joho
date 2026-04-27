@@ -32,8 +32,10 @@ class FetchCLI:
     ) -> None:
         if args.title:
             if args.show_title:
-                all_data = normalizer.get_all_anime_by_title(args.title, args.max_entry)
-                self._show_title(all_data)
+                data_list = normalizer.get_all_anime_by_title(
+                    args.title, args.max_entry
+                )
+                self._show_title(data_list)
                 return
             data = normalizer.get_anime_by_title(args.title, args.entry)
             self._show_entry(data)
@@ -46,23 +48,35 @@ class FetchCLI:
     ) -> None:
         if args.title:
             data_collection = get_all_data_by_title(args, *normalizers)
-            if args.show_title:
-                for all_data in data_collection:
-                    self._show_title(all_data)
-                return
-            for all_data in data_collection:
-                try:
-                    self._show_entry(
-                        all_data[
-                            DEFAULT_ENTRY_INDEX if args.entry is None else args.entry
-                        ]
-                    )
-                except IndexError as e:
-                    raise EntryIndexError from e
+            success_query = 0
+            for data_list in data_collection:
+                if isinstance(data_list, BaseException):
+                    self._show_error(data_list)
+                    break
+                if args.show_title:
+                    self._show_title(data_list)
+                else:
+                    try:
+                        self._show_entry(
+                            data_list[
+                                DEFAULT_ENTRY_INDEX
+                                if args.entry is None
+                                else args.entry
+                            ]
+                        )
+                    except IndexError as e:
+                        raise EntryIndexError from e
+                success_query += 1
+            self._show_fetch_status(success_query, len(data_collection))
         elif args.id:
-            all_data = get_all_data_by_id(args, *normalizers)
-            for data in all_data:
+            data_list = get_all_data_by_id(args, *normalizers)
+            success_query = 0
+            for data in data_list:
+                if isinstance(data, BaseException):
+                    self._show_error(data)
+                    break
                 self._show_entry(data)
+            self._show_fetch_status(success_query, len(data_list))
 
     def _show_entry(self, entry_data: AnimeDataModel) -> None:
         for f in fields(entry_data):
@@ -70,9 +84,15 @@ class FetchCLI:
             print(f"{f.name}: {value}")
         print("")
 
-    def _show_title(self, all_data: list[AnimeDataModel]) -> None:
-        print(f"Source: {all_data[0].data_source}")
+    def _show_title(self, data_list: list[AnimeDataModel]) -> None:
+        print(f"Source: {data_list[0].data_source}")
         print("Romaji title | English title")
-        for i, entry_data in enumerate(all_data):
+        for i, entry_data in enumerate(data_list):
             print(f"{i}. {entry_data.romaji_title} | {entry_data.english_title}")
         print("")
+
+    def _show_error(self, error: BaseException) -> None:
+        print(error)
+
+    def _show_fetch_status(self, success: int, total_export: int) -> None:
+        print(f"{success} / {total_export} fetched successfully")

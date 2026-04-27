@@ -37,8 +37,10 @@ class ExportCLI:
     ) -> None:
         if args.title:
             if args.save_all:
-                all_data = normalizer.get_all_anime_by_title(args.title, args.max_entry)
-                self._save_data_list(args, all_data)
+                data_list = normalizer.get_all_anime_by_title(
+                    args.title, args.max_entry
+                )
+                self._save_data_list(args, data_list)
                 return
             data = normalizer.get_anime_by_title(args.title, args.entry)
             self._save_entry(args, data)
@@ -53,22 +55,37 @@ class ExportCLI:
     ) -> None:
         if args.title:
             data_collection = get_all_data_by_title(args, *normalizers)
-            if args.save_all:
-                self._save_data_collection(args, data_collection)
-                return
-            for all_data in data_collection:
-                try:
-                    self._save_entry(
-                        args,
-                        all_data[
-                            DEFAULT_ENTRY_INDEX if args.entry is None else args.entry
-                        ],
-                    )
-                except IndexError as e:
-                    raise EntryIndexError from e
+            success_query = 0
+            for data_list in data_collection:
+                if isinstance(data_list, BaseException):
+                    self._show_error(data_list)
+                    break
+                if args.save_all:
+                    self._save_data_list(args, data_list)
+                else:
+                    try:
+                        self._save_entry(
+                            args,
+                            data_list[
+                                DEFAULT_ENTRY_INDEX
+                                if args.entry is None
+                                else args.entry
+                            ],
+                        )
+                    except IndexError as e:
+                        raise EntryIndexError from e
+                success_query += 1
+            self._show_export_status(success_query, len(data_collection))
         elif args.id:
-            all_data = get_all_data_by_id(args, *normalizers)
-            self._save_data_list(args, all_data)
+            data_list = get_all_data_by_id(args, *normalizers)
+            success_query = 0
+            for data in data_list:
+                if isinstance(data, BaseException):
+                    self._show_error(data)
+                    break
+                self._save_entry(args, data)
+                success_query += 1
+            self._show_export_status(success_query, len(data_list))
 
     def _save_entry(
         self,
@@ -80,12 +97,12 @@ class ExportCLI:
     def _save_data_list(
         self, args: Namespace, data_list: Iterable[AnimeDataModel]
     ) -> None:
-        self.file_handler.save_all_data(data_list, args.path, args.overwrite)
+        for data in data_list:
+            self._save_entry(args, data)
+            args.overwrite = False
 
-    def _save_data_collection(
-        self, args: Namespace, data_collection: Iterable[Iterable[AnimeDataModel]]
-    ) -> None:
-        overwrite: bool = args.overwrite
-        for data_list in data_collection:
-            self.file_handler.save_all_data(data_list, args.path, overwrite)
-            overwrite = False
+    def _show_error(self, error: BaseException) -> None:
+        print(error)
+
+    def _show_export_status(self, success: int, total_export: int) -> None:
+        print(f"{success} / {total_export} exported successfully")
