@@ -112,7 +112,9 @@ class FetchAnilist(FetchData):
         self, url: str, query: str, variables: dict[str, str | int]
     ) -> requests.Response:
         try:
-            response = requests.post(url, json={"query": query, "variables": variables})
+            response = requests.post(
+                url, json={"query": query, "variables": variables}, timeout=3.0
+            )
         except requests.ConnectionError as e:
             raise AppConnectionError(f"Connection error occured: {e}")
         return response
