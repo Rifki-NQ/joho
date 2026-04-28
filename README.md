@@ -72,7 +72,7 @@ joho/
 │       │   ├── anilist_fetcher.py         # Fetcher for AniList API
 │       │   └── jikan_fetcher.py           # Fetcher for Jikan API
 │       └── normalizers/
-│       │   ├── __init__.py
+│           ├── __init__.py
 │           ├── base_normalizer.py         # Abstract base class for normalizers
 │           ├── normalizer_factory.py      # Normalizers factory
 │           ├── anilist_normalizer.py      # Normalizer for AniList API data
@@ -291,6 +291,8 @@ source: Light novel
 genres: Adventure|Drama|Fantasy|Ecchi
 all_time_rank: 293
 all_time_popularity: 84
+
+2 / 2 fetched successfully
 ```
 
 ---
