@@ -92,7 +92,7 @@ class ExportCLI:
         args: Namespace,
         entry_data: AnimeDataModel,
     ) -> None:
-        self.file_handler.save_data(entry_data, args.path, args.overwrite)
+        self.file_handler.save_data(entry_data, args.overwrite)
 
     def _save_data_list(
         self, args: Namespace, data_list: Iterable[AnimeDataModel]

@@ -74,7 +74,7 @@ def main_parser() -> None:
                 args.title if args.title is not None else args.id
             )
 
-        export_cli = ExportCLI(DataIO())
+        export_cli = ExportCLI(DataIO(args.path))
         if args.source == "all":
             export_cli.handle_export_cli(
                 args,
