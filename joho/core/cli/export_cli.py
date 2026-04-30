@@ -77,15 +77,15 @@ class ExportCLI:
                 success_query += 1
             self._show_export_status(success_query, len(data_collection))
         elif args.id:
-            data_list = get_all_data_by_id(args, *normalizers)
+            data_list_by_id = get_all_data_by_id(args, *normalizers)
             success_query = 0
-            for data in data_list:
+            for data in data_list_by_id:
                 if isinstance(data, BaseException):
                     self._show_error(data)
                     continue
                 self._save_entry(args, data)
                 success_query += 1
-            self._show_export_status(success_query, len(data_list))
+            self._show_export_status(success_query, len(data_list_by_id))
 
     def _save_entry(
         self,

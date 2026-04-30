@@ -69,15 +69,15 @@ class FetchCLI:
                 success_query += 1
             self._show_fetch_status(success_query, len(data_collection))
         elif args.id:
-            data_list = get_all_data_by_id(args, *normalizers)
+            data_list_by_id = get_all_data_by_id(args, *normalizers)
             success_query = 0
-            for data in data_list:
+            for data in data_list_by_id:
                 if isinstance(data, BaseException):
                     self._show_error(data)
                     continue
                 self._show_entry(data)
                 success_query += 1
-            self._show_fetch_status(success_query, len(data_list))
+            self._show_fetch_status(success_query, len(data_list_by_id))
 
     def _show_entry(self, entry_data: AnimeDataModel) -> None:
         for f in fields(entry_data):
