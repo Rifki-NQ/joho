@@ -82,7 +82,7 @@ class ExportCLI:
             for data in data_list:
                 if isinstance(data, BaseException):
                     self._show_error(data)
-                    break
+                    continue
                 self._save_entry(args, data)
                 success_query += 1
             self._show_export_status(success_query, len(data_list))
