@@ -94,7 +94,7 @@ class FetchAnilist(FetchData):
             variables={"search": anime_title},
         )
         media_data = data.json()["data"]["Page"]["media"]
-        if media_data is None:
+        if not media_data:
             raise AnilistError("Error: requested anime not found!")
         return media_data
 
@@ -103,7 +103,7 @@ class FetchAnilist(FetchData):
             url=self.BASE_URL, query=self.QUERY_BY_ID, variables={"id": anime_id}
         )
         media_data = data.json()["data"]["Media"]
-        if media_data is None:
+        if not media_data:
             raise AnilistError("Error: requested anime not found!")
         return media_data
 
