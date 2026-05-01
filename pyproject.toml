@@ -10,14 +10,12 @@ requires-python = ">=3.10"
 dependencies = [
     "requests",
     "jikanpy-v4",
-    "pandas"
 ]
 
 [project.optional-dependencies]
 dev = [
     "pytest",
     "mypy",
-    "pandas-stubs",
     "types-requests"
 ]
 
