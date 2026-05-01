@@ -40,13 +40,13 @@ class ExportCLI:
                 data_list = normalizer.get_all_anime_by_title(
                     args.title, args.max_entry
                 )
-                self._save_data_list(args, data_list)
+                self._save_data_list(args.overwrite, data_list)
                 return
             data = normalizer.get_anime_by_title(args.title, args.entry)
-            self._save_entry(args, data)
+            self._save_entry(args.overwrite, data)
         elif args.id:
             data = normalizer.get_anime_by_id(args.id)
-            self._save_entry(args, data)
+            self._save_entry(args.overwrite, data)
 
     def _handle_export_multiple(
         self,
@@ -55,17 +55,18 @@ class ExportCLI:
     ) -> None:
         if args.title:
             data_collection = get_all_data_by_title(args, *normalizers)
+            overwrite: bool = args.overwrite
             success_query = 0
             for data_list in data_collection:
                 if isinstance(data_list, BaseException):
                     self._show_error(data_list)
                     continue
                 if args.save_all:
-                    self._save_data_list(args, data_list)
+                    self._save_data_list(overwrite, data_list)
                 else:
                     try:
                         self._save_entry(
-                            args,
+                            overwrite,
                             data_list[
                                 DEFAULT_ENTRY_INDEX
                                 if args.entry is None
@@ -74,6 +75,7 @@ class ExportCLI:
                         )
                     except IndexError as e:
                         raise EntryIndexError from e
+                overwrite = False
                 success_query += 1
             self._show_export_status(success_query, len(data_collection))
         elif args.id:
@@ -83,23 +85,23 @@ class ExportCLI:
                 if isinstance(data, BaseException):
                     self._show_error(data)
                     continue
-                self._save_entry(args, data)
+                self._save_entry(args.overwrite, data)
                 success_query += 1
             self._show_export_status(success_query, len(data_list_by_id))
 
     def _save_entry(
         self,
-        args: Namespace,
+        overwrite: bool,
         entry_data: AnimeDataModel,
     ) -> None:
-        self.file_handler.save_data(entry_data, args.overwrite)
+        self.file_handler.save_data(entry_data, overwrite)
 
     def _save_data_list(
-        self, args: Namespace, data_list: Iterable[AnimeDataModel]
+        self, overwrite: bool, data_list: Iterable[AnimeDataModel]
     ) -> None:
         for data in data_list:
-            self._save_entry(args, data)
-            args.overwrite = False
+            self._save_entry(overwrite, data)
+            overwrite = False
 
     def _show_error(self, error: BaseException) -> None:
         print(error)

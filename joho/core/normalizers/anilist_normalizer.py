@@ -56,7 +56,7 @@ class AnilistNormalizer(BaseNormalizer):
             all_time_rank=self._get_ranking("RATED", data["rankings"]),
             all_time_popularity=self._get_ranking("POPULAR", data["rankings"]),
         )
-        
+
     def _convert_to_float(self, score: int | None) -> float | None:
         if score is None:
             return None

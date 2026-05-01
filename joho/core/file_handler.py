@@ -23,7 +23,6 @@ class DataIO:
         except pd.errors.EmptyDataError:
             return self._get_empty_dataframe_model(AnimeDataModel)
         except FileNotFoundError:
-            # cli guarantee the file is in storage/
             self._get_empty_dataframe_model(AnimeDataModel).to_csv(
                 self.filepath, index=False
             )
