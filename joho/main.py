@@ -14,7 +14,7 @@ from joho.core.constants import VALID_DATA_SOURCES
 
 
 def main_parser() -> None:
-    VALID_SOURCES = {"anilist", "jikan", "all"}
+    VALID_SOURCES = (*VALID_DATA_SOURCES, "all")
     parser = argparse.ArgumentParser(prog="joho")
     subparsers = parser.add_subparsers(dest="command")
 
