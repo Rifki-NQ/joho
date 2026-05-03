@@ -56,3 +56,15 @@ class FileEmptyError(FileHandlerError):
     """Raised when the file contains empty data"""
 
     pass
+
+
+class MissingHeaderError(FileHandlerError):
+    """Raised when the file contains data that is missing some header"""
+
+    pass
+
+
+class InvalidHeaderError(FileHandlerError):
+    """Raised when the file contains data with invalid or unexpected header"""
+
+    pass
