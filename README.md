@@ -42,6 +42,10 @@ Retrieve anime data from the API using either a title string or a numeric ID. Ea
 
 Save fetched anime data to a CSV file.
 
+### Read Anime Data
+
+Read the exported anime data
+
 ---
 
 ## Project Structure
@@ -65,6 +69,7 @@ joho/
 │       │   ├── __init__.py
 │       │   ├── fetch_cli.py               # Fetch data then print
 │       │   ├── export_cli.py              # Fetch data then save
+│       │   ├── read_cli.py                # Read saved data
 │       │   └── cli_utils.py               # CLI Helper functions
 │       ├── fetchers/
 │       │   ├── __init__.py
@@ -215,6 +220,34 @@ joho export --source anilist --title "mushoku tensei" --path storage/data.csv --
 
 # Show export subcommand help
 joho export --help
+```
+
+#### `read` — Read exported anime data
+
+```bash
+read --path <path> [--entry <entry>]
+```
+
+**Options:**
+
+| Flag | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `--path` | string | ✅ Yes | Destination file path to read the exported data |
+| `--entry` | int | ❌ No | Entry number to read only that entry (default: `none`) |
+
+> - if the `--entry` value is not provided, all entries from the file will be shown
+
+**Examples:**
+
+```bash
+# Read all data
+joho read --path "storage/data.csv"
+
+# Read data, only entry number 2
+joho read --path "storage/data.csv" --entry 2
+
+# Show read subcommand help
+joho read --help
 ```
 
 ---
